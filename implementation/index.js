@@ -1,5 +1,5 @@
 export const
-    ENUMS =
+    ENUM =
         new Proxy(Object.create(null), {
             get(nil, key) {
                 return (`${key}`);
@@ -13,7 +13,7 @@ export const
 * COLORS.green; // 'green'
 * COLORS.blue; // 'blue'
 */    
-let COLORS = ENUMS;
+let COLORS = ENUM;
 
 export 
     const
@@ -25,7 +25,7 @@ export
             }
             ,
             grid : {
-                /* name: 'grid', */// (default)
+                id: 'grid',// (default)
                 hidden: !true,
                 dotted: !true,
                 lineWidth: 0.1, /* <=: for colours like 'magenta', use partial value to allow reader's eye to be easier to adapt... */

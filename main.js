@@ -1,16 +1,22 @@
-import { userConfigs, ENUMS } from './implementation/index.js';
+import { userConfigs, ENUM } from './implementation/index.js';
 import { HTMLCanvas } from './src/views/index.js';
 import package_json from './package.json' with { type: 'json' };
 
 /**
 * @example
-* EVENTS.DOMContentLoaded; // 'DOMContentLoaded'
-* EVENTS.resize; // 'resize'
-* EVENTS.click; // 'click'
+* UI_EVENTS.DOMContentLoaded; // 'DOMContentLoaded'
+* UI_EVENTS.resize; // 'resize'
+* UI_EVENTS.click; // 'click'
 */  
-let EVENTS = ENUMS;
+const
+    UI_EVENTS = ENUM
+    ,
+    SHAPE_TYPE = ENUM
+    ,
+    COLORS = ENUM
+    ;
 
-document.addEventListener(EVENTS.DOMContentLoaded, ()=>{
+document.addEventListener(UI_EVENTS.DOMContentLoaded, ()=>{
 
     document.title = package_json.name;
 
@@ -28,27 +34,27 @@ document.addEventListener(EVENTS.DOMContentLoaded, ()=>{
         
     if ( HTMLCanvas.init({stage}) ) {
 
-        window.on(EVENTS.resize, ()=>{
+        window.on(UI_EVENTS.resize, ()=>{
 
             HTMLCanvas
                 .init({stage})
                     .on((context)=>{
 
-                        /**
-                         * > README: herein our `stage` exposes `stage.grid.GRIDCELL_DIM` - that's a central value (multiplicand) for any view (a.k.a. shape) to be multiplied by to be responsive, and also by moving such shape around grid-first coordinate system
-                         */
-                        let README;
-
+                        // DEV_NOTE # because we mix HTML Canvas (CanvasRenderingContext2D) together with XML SVG, we must do the following check:..
                         if ( context instanceof CanvasRenderingContext2D ) {
                                                                 
-                                switch (context.canvas.name) {
+                                switch (context.canvas.id) {
                 
-                                    case stage.layers.grid.name :
+                                    case SHAPE_TYPE.grid :
 
                                         HTMLCanvas.Views.Grid.draw({
                                             context, 
                                             options: {
-                                                ...userConfigs.grid
+                                                ...userConfigs.grid,
+                                                /**
+                                                 * @override
+                                                 */
+                                                strokeStyle: COLORS.blue
                                             }}
                                         );
 
@@ -62,7 +68,7 @@ document.addEventListener(EVENTS.DOMContentLoaded, ()=>{
         })
 
         // # This allows to initiate `<canvas>` hosted "bitmap" with internal context without waiting `window.onresize` to be triggered by end-user
-        window.dispatchEvent(new Event(EVENTS.resize));
+        window.dispatchEvent(new Event(UI_EVENTS.resize));
 
     }
 
